@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth import get_user_model
+from django.conf import settings
 from django.utils import timezone
 from typing import Tuple
 from uuid import uuid4
@@ -14,7 +15,6 @@ def hexcode_gen():
 def get_banner_title():
     sl = Carousel.objects.count() + 1
     return f"New Banner {sl}"
-    
 
 order_status_options = (
     ('pending', 'Pending'),
@@ -254,7 +254,8 @@ class Cart(models.Model):
         amount = 0
         for cart_prod in self.cartproduct_set.all():
             items += cart_prod.quantity
-            amount += (cart_prod.product.selling_price * cart_prod.quantity)
+            unit_price = cart_prod.sale_price if self.checked_out else cart_prod.product.selling_price
+            amount += (unit_price * cart_prod.quantity)
         return (items, amount)
     
     def check_all_products_in_stock(self) -> bool:
@@ -270,6 +271,7 @@ class Cart(models.Model):
 class CartProduct(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    sale_price = models.FloatField(default=0)
     quantity = models.IntegerField(default=1)
 
     class Meta:
@@ -319,13 +321,15 @@ class Order(models.Model):
     address = models.CharField(max_length=512)
     cart = models.OneToOneField(Cart, on_delete=models.CASCADE)
     coupon = models.ForeignKey(Coupon, null=True, blank=True, on_delete=models.SET_NULL)
+    coupon_discount_amount = models.FloatField(default=0)
+    shipping_charge = models.FloatField(default=0)
     payable = models.FloatField(default=0)
     status = models.CharField(max_length=20, choices=order_status_options, default='pending')
     added_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['-added_at']
-
+        
 
 class OrderStatusTimestamp(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)

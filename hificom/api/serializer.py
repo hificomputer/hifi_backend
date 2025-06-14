@@ -288,7 +288,7 @@ class CartProductSerializer(ModelSerializer):
     product = ProductBasicSerializer(read_only=True)
     class Meta:
         model = CartProduct
-        fields = ['product', 'quantity']
+        fields = ['product', 'quantity', 'sale_price']
 
 
 class CouponSerializer(ModelSerializer):
@@ -324,15 +324,11 @@ class OrderDetailSerializer(OrderSerializer):
             context = self.context
         )
         total_items, total_amount = obj.cart.cart_total()
-        shipping_charge = settings.SHIPPING_CHARGES.get(obj.location, 0) * total_items
-        coupon_discount_amount = 0
-        if coupon:=obj.coupon:
-            coupon_discount_amount = coupon.get_discount_amount(total_amount)
         return {
             'total_items': total_items,
             'total_amount': total_amount,
-            'shipping_charge': shipping_charge,
-            'coupon_discount': coupon_discount_amount,
+            'shipping_charge': obj.shipping_charge,
+            'coupon_discount': obj.coupon_discount_amount,
             'products': products.data
         }
 
