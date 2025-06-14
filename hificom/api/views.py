@@ -280,13 +280,9 @@ class ConfirmOrder(CreateAPIView):
                 {'detail': 'Some products in cart are out of stock'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        item_count, payable = cart.cart_total()
-        payable += utils.get_shipping_charges(item_count, data['location'])
         coupon_code = data.get('coupon')
         if coupon := Coupon.objects.filter(code=coupon_code).first():
-            payable -= utils.get_coupon_discount_amount(cart, coupon)
             data['coupon'] = coupon.id
-        data['payable'] = payable
         data['cart'] = cart.id
         if request.user.is_authenticated:
             data['user'] = request.user.id

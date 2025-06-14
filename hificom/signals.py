@@ -23,10 +23,13 @@ def create_feedback_notification(sender, instance, created, **kwargs):
 def order_pre_save(sender, instance, **kwargs):
     total_items, total_amount = instance.cart.cart_total()
     shipping_charge = settings.SHIPPING_CHARGES.get(instance.location, 0) * total_items
+    discount_amount =  0
     if instance.coupon:
-        instance.coupon_discount_amount = instance.coupon.get_discount_amount(total_amount)
+        discount_amount = instance.coupon.get_discount_amount(total_amount)
+        instance.coupon_discount_amount = discount_amount
     if instance.shipping_charge == 0:
         instance.shipping_charge = shipping_charge
+    instance.payable = total_amount + shipping_charge - discount_amount
 
 
 @receiver(post_save, sender=Order)
