@@ -304,6 +304,14 @@ class Coupon(models.Model):
         elif discount:=self.discount_amount:
             discount_amount = min(subtotal, discount)
         return discount_amount
+    
+    def is_valid(self) -> bool:
+        now = timezone.now()
+        if self.expiry < now:
+            return False
+        if self.max_usage is not None and self.max_usage <= 0:
+            return False
+        return True
 
 
 class Order(models.Model):

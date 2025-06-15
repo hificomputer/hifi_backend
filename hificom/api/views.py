@@ -282,6 +282,11 @@ class ConfirmOrder(CreateAPIView):
             )
         coupon_code = data.get('coupon')
         if coupon := Coupon.objects.filter(code=coupon_code).first():
+            if not coupon.is_valid():
+                return Response(
+                    {'detail': 'Invalid or expired coupon'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
             data['coupon'] = coupon.id
         data['cart'] = cart.id
         if request.user.is_authenticated:
@@ -412,6 +417,8 @@ def get_cart_products(request):
 @api_view(['POST'])
 def apply_coupon(request):
     coupon = get_object_or_404(Coupon, code=request.data.get('coupon'))
+    if not coupon.is_valid():
+        return Response({'detail': 'Invalid or expired coupon'}, status=status.HTTP_400_BAD_REQUEST)
     cart = get_object_or_404(Cart, cartid=request.data.get('cartid'))
     try:
         discount_amount = utils.get_coupon_discount_amount(cart, coupon)

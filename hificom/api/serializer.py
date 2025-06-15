@@ -298,7 +298,6 @@ class CouponSerializer(ModelSerializer):
 
 
 class OrderSerializer(ModelSerializer):
-    coupon = CouponSerializer(read_only=True)
     thumbnail = serializers.SerializerMethodField()
     
     class Meta:
