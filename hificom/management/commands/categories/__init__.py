@@ -11,6 +11,7 @@ from .sound_system import SOUND_SYSTEM_CATEGORIES, SOUND_SYSTEM_GROUPS
 from .office_quipments import OFFICE_EQUIPMENT_CATEGORIES
 from .softwares import SOFTWARE_CATEGORIES
 from .smartphone import ALL_SMARTPHONE_CATEGORIES
+from .cc_camaera import CC_CAMERA_CATEGORIES
 
 with open('cat_tree.yaml') as f:
     cat_tree = yaml.load(f, yaml.SafeLoader)
@@ -32,6 +33,7 @@ ALL_CATEGORIES = [
     *OFFICE_EQUIPMENT_CATEGORIES,
     *SOFTWARE_CATEGORIES,
     *ALL_SMARTPHONE_CATEGORIES,
+    *CC_CAMERA_CATEGORIES
 ]
 
 ALL_GROUPS = [

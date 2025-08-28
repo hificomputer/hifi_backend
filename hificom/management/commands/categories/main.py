@@ -79,5 +79,12 @@ MAIN_CATEGORIES = [
         'priority': 0,
         'seo_title': 'Smartphones at HiFi Computer',
         'description': 'Discover the latest smartphones at HiFi Computer, featuring top brands and models for every budget. Whether you need a flagship device or a budget-friendly option, find the perfect smartphone at competitive prices in Bangladesh. Enjoy doorstep delivery and exclusive discounts on smartphones.',
-    }
+    },
+    {
+        'title': 'CC Camera',
+        'slug': 'cc-camera',
+        'priority': 0,
+        'seo_title': 'CC Cameras at HiFi Computer',
+        'description': 'Discover high-quality CC cameras at HiFi Computer, perfect for home security and monitoring. Explore a variety of models and brands at competitive prices in Bangladesh. Enjoy doorstep delivery and special discounts on CC cameras.',
+    },
 ]

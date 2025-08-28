@@ -939,3 +939,8 @@ software:
   - productivity-software
   - windows
   - antivirus
+
+
+cc-camera:
+  - dahua-cc-camera
+  - hikvision-cc-camera
