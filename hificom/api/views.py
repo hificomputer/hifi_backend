@@ -41,6 +41,27 @@ User = get_user_model()
 
 
 @api_view()
+def sitemap_data(request):
+    """Lightweight feed of category & product slugs for the frontend sitemap.xml."""
+    categories = Category.objects.values('slug')
+    products = Product.objects.values('slug', 'updated_at')
+    data = {
+        'categories': [
+            {'slug': cat['slug']}
+            for cat in categories
+        ],
+        'products': [
+            {
+                'slug': prod['slug'],
+                'updated_at': prod['updated_at'],
+            }
+            for prod in products
+        ],
+    }
+    return Response(data)
+
+
+@api_view()
 def user_homepage(request):
     data = {
         'carousels': CarouselSerializer(

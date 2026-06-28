@@ -3,6 +3,7 @@ from hificom.api import views
 
 
 urlpatterns = [
+    path('sitemap-data/', views.sitemap_data, name="sitemap_data"),
     path('homepage/', views.user_homepage, name="user_homepage"),
     path('homepage/stats/', views.dashboard_stats, name="dashboard_stats"),
     path('collections/', views.ProductCollectionsView.as_view(), name="collections"),
